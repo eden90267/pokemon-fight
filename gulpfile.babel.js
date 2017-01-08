@@ -1,15 +1,13 @@
+'use strict';
+
 import gulp from 'gulp';
-import sass from 'gulp-sass';
-import uglify from 'gulp-uglify';
-import connect from 'gulp-connect';
-import browserify from 'browserify';
-import babelify from 'babelify';
-// 轉成 gulp 讀取的 vinyl（黑膠）流
-import source from 'vinyl-source-stream';
-import buffer from 'vinyl-buffer';
-import sourcemaps from 'gulp-sourcemaps';
-import gutil from 'gulp-util';
+import sass from 'gulp-sass';// import autoprefixer from 'gulp-autoprefixer';
+import uglify from 'gulp-uglify';// import autoprefixer from 'gulp-autoprefixer';
 import image from 'gulp-image';
+import connect from 'gulp-connect';// import autoprefixer from 'gulp-autoprefixer';
+import browserify from 'browserify';// import autoprefixer from 'gulp-autoprefixer';
+import babelify from 'babelify';// import autoprefixer from 'gulp-autoprefixer';
+import source from 'vinyl-source-stream';
 
 const dirs = {
   src: 'src',
@@ -19,11 +17,6 @@ const dirs = {
 const stylesPaths = {
   src: `${dirs.src}/styles/*.scss`,
   dest: `${dirs.dest}/css`
-};
-
-const htmlPaths = {
-  src: `${dirs.src}/*.html`,
-  dest: `${dirs.dest}`
 };
 
 const scriptsPaths = {
@@ -44,46 +37,32 @@ gulp.task('styles', () => {
 });
 
 gulp.task('scripts', function(){
-    return browserify({
-        entries: ['./src/scripts/main.js']
-    })
-    .transform(babelify)
-    .bundle()
-    .pipe(source('bundle.js'))
-    .pipe(buffer()) // <----- convert from streaming to buffered vinyl file object
-    .pipe(sourcemaps.init({loadMaps: true}))
-        .pipe(uglify())
-        .on('error', gutil.log)
-    .pipe(sourcemaps.write('./'))
-    .pipe(gulp.dest(scriptsPaths.dest))
-    .pipe(connect.reload());
+  return browserify({
+      entries: ['./src/scripts/main.js']
+  })
+  .transform(babelify)
+  .bundle()
+  .pipe(source('bundle.js'))
+  .pipe(gulp.dest(scriptsPaths.dest));
 });
 
 gulp.task('images', function() {
   gulp.src(imagesPaths.src)
     .pipe(image())
-    .pipe(gulp.dest(imagesPaths.dest))
-    .pipe(connect.reload());
+    .pipe(gulp.dest(imagesPaths.dest));
 });
 
-gulp.task('copy-html', function(){
-  return gulp.src(htmlPaths.src).pipe(gulp.dest(htmlPaths.dest)).pipe(connect.reload());
-});
-
-gulp.task('server', function () {
+gulp.task('server', function() {
   connect.server({
-    root: ['./dist'],
     livereload: true,
     port: 7777,
   });
 });
 
-gulp.task('watch', function () {
+gulp.task('watch', function() {
   gulp.watch(stylesPaths.src, ['styles']);
   gulp.watch(scriptsPaths.src, ['scripts']);
-  gulp.watch(imagesPaths.src, ['images']);
-  gulp.watch(htmlPaths.src, ['copy-html']);
 });
 
-gulp.task('default', ['copy-html', 'scripts', 'styles', 'images', 'server', 'watch']);
-gulp.task('build', ['copy-html', 'scripts', 'styles', 'images']);
+gulp.task('default', ['scripts', 'styles', 'images', 'server', 'watch']);
+gulp.task('build', ['scripts', 'styles', 'images', 'server']);
