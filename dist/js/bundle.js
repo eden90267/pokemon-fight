@@ -119,54 +119,50 @@ document.querySelector('#play').addEventListener('click', function () {
 	if (winner) {
 		alert('\u52DD\u8CA0\u5DF2\u5206\uFF0C\u7372\u52DD\u7684\u662F' + winner + '\u9078\u624B');
 	} else {
+		// 隨機決定一個還存活的對方神奇寶貝
 		while (!competitors[competitorChoice].isAlive()) {
 			competitorChoice = Math.floor(Math.random() * 3);
 		}
 
+		// 驗證使用者輸入的數字是否正確
 		if (!(choice < 3) || !(choice >= 0)) {
 			alert('請輸入正確數字喔!');
 			return 0;
 		}
 
 		if (monsters[choice].isAlive()) {
+			var type = void 0;
 			switch (choice) {
 				case 0:
 					if (competitorChoice === 0) {
-						pk(choice, competitorChoice, 'tie');
-						showView(choice, competitorChoice);
+						type = 'tie';
 					} else if (competitorChoice === 1) {
-						pk(choice, competitorChoice, 'lost');
-						showView(choice, competitorChoice);
+						type = 'lost';
 					} else {
-						pk(choice, competitorChoice, 'win');
-						showView(choice, competitorChoice);
+						type = 'win';
 					}
 					break;
 				case 1:
 					if (competitorChoice === 0) {
-						pk(choice, competitorChoice, 'win');
-						showView(choice, competitorChoice);
+						type = 'win';
 					} else if (competitorChoice === 1) {
-						pk(choice, competitorChoice, 'tie');
-						showView(choice, competitorChoice);
+						type = 'tie';
 					} else {
-						pk(choice, competitorChoice, 'lost');
-						showView(choice, competitorChoice);
+						type = 'lost';
 					}
 					break;
 				case 2:
 					if (competitorChoice === 0) {
-						pk(choice, competitorChoice, 'lost');
-						showView(choice, competitorChoice);
+						type = 'lost';
 					} else if (competitorChoice === 1) {
-						pk(choice, competitorChoice, 'win');
-						showView(choice, competitorChoice);
+						type = 'win';
 					} else {
-						pk(choice, competitorChoice, 'tie');
-						showView(choice, competitorChoice);
+						type = 'tie';
 					}
 					break;
 			}
+			pk(choice, competitorChoice, type);
+			showView(choice, competitorChoice);
 		} else {
 			alert(monsters[choice].getName() + ' \u5DF2\u5931\u53BB\u6230\u9B25\u80FD\u529B\uFF01');
 			choice = -1;
@@ -222,12 +218,12 @@ function pk(choice, competitorChoice, type) {
 }
 
 function showView(choice, competitorChoice) {
-	var player1List = document.querySelector('#player1-list');
-	var player2List = document.querySelector('#player2-list');
+	document.querySelector('#player1-list').innerHTML = genViewHTML(monsters[choice]);
+	document.querySelector('#player2-list').innerHTML = genViewHTML(competitors[competitorChoice]);
+}
 
-	player1List.innerHTML = '\n\t  <li class="list-group-item">\n\t    <img class="monster-img" src="' + monsters[choice].getImage() + '">\n\t  </li>\n\t  <li class="list-group-item">\n\t    <div class="progress">\n\t      <div class="progress-bar" role="progressbar" aria-valuenow="' + monsters[choice].getHP() + '" aria-valuemin="0" aria-valuemax="100" style="width: ' + monsters[choice].getHP() + '%;">\n\t        ' + monsters[choice].getHP() + '%\n\t      </div>\n\t    </div>\n\t  </li>\n\t  <li class="list-group-item">' + monsters[choice].getName() + '</li>\n\t  <li class="list-group-item">\u5C6C\u6027\uFF1A' + monsters[choice].getType() + '</li>\n\t';
-
-	player2List.innerHTML = '\n\t  <li class="list-group-item">\n\t    <img class="monster-img" src="' + competitors[competitorChoice].getImage() + '">\n\t  </li>\n\t  <li class="list-group-item">\n\t    <div class="progress">\n\t      <div class="progress-bar" role="progressbar" aria-valuenow="' + competitors[competitorChoice].getHP() + '" aria-valuemin="0" aria-valuemax="100" style="width: ' + competitors[competitorChoice].getHP() + '%;">\n\t        ' + competitors[competitorChoice].getHP() + '%\n\t      </div>\n\t    </div>\n\t  </li>\n\t  <li class="list-group-item">' + competitors[competitorChoice].getName() + '</li>\n\t  <li class="list-group-item">\u5C6C\u6027\uFF1A' + competitors[competitorChoice].getType() + '</li>\n\t';
+function genViewHTML(pokemon) {
+	return '\n\t  <li class="list-group-item">\n\t    <img class="monster-img" src="' + pokemon.getImage() + '">\n\t  </li>\n\t  <li class="list-group-item">\n\t    <div class="progress">\n\t      <div class="progress-bar" role="progressbar" aria-valuenow="' + pokemon.getHP() + '" aria-valuemin="0" aria-valuemax="100" style="width: ' + pokemon.getHP() + '%;">\n\t        ' + pokemon.getHP() + '%\n\t      </div>\n\t    </div>\n\t  </li>\n\t  <li class="list-group-item">' + pokemon.getName() + '</li>\n\t  <li class="list-group-item">\u5C6C\u6027\uFF1A' + pokemon.getType() + '</li>\n\t';
 }
 
 },{"./Monster":1}]},{},[2]);
