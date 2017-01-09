@@ -64,5 +64,5 @@ gulp.task('watch', function() {
   gulp.watch(scriptsPaths.src, ['scripts']);
 });
 
-gulp.task('default', ['scripts', 'styles', 'server', 'watch']);
-gulp.task('build', ['scripts', 'styles', 'server']);
+gulp.task('default', ['images', 'scripts', 'styles', 'server', 'watch']);
+gulp.task('build', ['images', 'scripts', 'styles', 'server']);

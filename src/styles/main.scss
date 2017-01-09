@@ -3,7 +3,7 @@ body {
 }
 
 .title {
-	color: white;
+	color: #fff;
 }
 
 .align-center {
@@ -27,4 +27,18 @@ body {
 
 .margin-top {
 	margin-top: 15px;
+}
+
+.person {
+	color: #fff;
+}
+
+.monster-img {
+	width: 100px;
+}
+
+@media (max-width: 400px) {
+	.title {
+	    font-size: 20px;
+	}
 }
